@@ -1,5 +1,5 @@
 #from story_node import StoryNode
-#from story import Story
+from story import Story
 
 class Scene:
 	'''

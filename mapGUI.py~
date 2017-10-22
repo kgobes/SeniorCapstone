@@ -23,7 +23,6 @@ sceneSettingsScreen.resize(900, 600)
 #activity specifics screen- choose activity and randomness level
 activityScreen = QWidget() #screen repeated for each scene
 activityScreen.resize(900, 600)
-#int numscene = 0
 
 #def main():
 #	print('hey')
@@ -78,9 +77,7 @@ def chooseLocation():
 	#loc6.setSyleSheet("border: 1px solid black")
 
 	choose = QPushButton("Choose this location", chooseLocScreen)
-	numscene = 6
-	
-	choose.clicked.connect(lambda: chooseActivities(numscene))
+	choose.clicked.connect(exit)
 	choose.move(375,550)
 	
 	chooseLocScreen.show()
@@ -90,68 +87,20 @@ def chooseSceneSettings():
 	title = QLabel('Choose Scene Settings', sceneSettingsScreen)
         title.setStyleSheet("font: bold 15pt")
         title.move(320,30)
-	#choose num players
-	numPlayerLabel  = QLabel("Number of players: ",sceneSettingsScreen)
-        numPlayerLabel.move(290, 100)
-	numplayers = QComboBox(sceneSettingsScreen)
-	numplayers.addItem("1", sceneSettingsScreen)
-	numplayers.addItem("2", sceneSettingsScreen)
-	numplayers.addItem("3",sceneSettingsScreen)
-	numplayers.addItem("4",sceneSettingsScreen)
-	numplayers.addItem("5",sceneSettingsScreen)
-	numplayers.move(410, 95)
-        #choose num scenes
-	numSceneLabel  = QLabel("Number of scenes: ",sceneSettingsScreen)
-	numSceneLabel.move(290, 150)
-	numscenes = QComboBox(sceneSettingsScreen)
-	numscenes.addItem("1",sceneSettingsScreen)
-	numscenes.addItem("2",sceneSettingsScreen)
-	numscenes.addItem("3",sceneSettingsScreen)
-	numscenes.addItem("4",sceneSettingsScreen)
-	numscenes.addItem("5",sceneSettingsScreen)
-        numscenes.move(410, 145)
-	#later add: select specfic players
 	button = QPushButton("Done", sceneSettingsScreen)
 	button.clicked.connect(chooseLocation)
-	button.move(350, 400)
+	button.move(375, 550)
 	
 	#declaration of map object for this instance
 	#myMap = 
 
 	sceneSettingsScreen.show()
 	#app.exec_()
-def chooseActivities(numscene):
+def chooseActivities():
 	chooseLocScreen.hide()
-	title = QLabel('Scene Activity Selection', activityScreen)
+	title = QLabel('Select an Activity for Scene 1', activityScreen)
         title.setStyleSheet("font: bold 15pt")
         title.move(320,30)
-	actLabel = QLabel('Choose an activity for Scene ', activityScreen)
-	sceneNum = QLabel('', activityScreen)
-	sceneNum.setNum(numscene)
-	actLabel.move(300, 100)
-	sceneNum.move(500, 100)
-	activitySelect = QComboBox(activityScreen)
-	activitySelect.addItem("Treasure Hunting", activityScreen)
-	activitySelect.addItem("Hiking", activityScreen)
-	activitySelect.move(420, 200)
-	button = QPushButton("Done", activityScreen)
-	#if(numscene>0):
-		#numscene = numscene-1
-		
-	print(numscene)
-		#button.clicked.connect(lambda: chooseActivities(numscene))
-		#button.move(350, 400)
-		#activityScreen.show()
-	#else:
-		#button.clicked.connect(exit)
-        button.clicked.connect(lambda: chooseActivitiesHelper(numscene)) 
-       	button.move(350, 400)
-	activityScreen.show()
-def chooseActivitiesHelper(numscene):
-	numscene = numscene-1
-	if(numscene>0):
-		chooseActivities(numscene)
-	
 def mainMenu():
 	title = QLabel('Main Menu', startScreen)
         title.setStyleSheet("font: bold 15pt")
@@ -163,7 +112,7 @@ def mainMenu():
 	#button for playing existing
 	playExisting = QPushButton("Play Existing Story", startScreen)
 	playExisting.clicked.connect(exit) #eventually will have list of stories and then play them
-	playExisting.move(375, 250)
+	playExisting.move(357, 250)
 	#button for speech recognition 
 	addPlayers = QPushButton("Add Players", startScreen)
 	addPlayers.clicked.connect(exit) #will go into speech recognition mode
