@@ -23,11 +23,27 @@ sceneSettingsScreen.resize(900, 600)
 #activity specifics screen- choose activity and randomness level
 activityScreen = QWidget() #screen repeated for each scene
 activityScreen.resize(900, 600)
-#int numscene = 0
+#global numscene
+numscene = 8
 
-#def main():
-#	print('hey')
+'''
+window = QWidget()
+window.show()
+layout = QGridLayout(window)
+layout.addWidget(activityScreen)
+#layout.addWidget(startScreen)
+#layout.addWidget(chooseLocScreen)
+#layout.addWidget(sceneSettingsScreen)
+'''
+
+def main():
+	#Start the app
+	#preload the scenes from function of another class
+#	window.resize(900, 600)
+	mainMenu()
+	print('hey')
 #	chooseLocation()
+
 def chooseLocation():	
 	title = QLabel('Select a Location for Scene 1', chooseLocScreen)
 	title.setStyleSheet("font: bold 15pt")
@@ -78,11 +94,17 @@ def chooseLocation():
 	#loc6.setSyleSheet("border: 1px solid black")
 
 	choose = QPushButton("Choose this location", chooseLocScreen)
-	numscene = 6
+	#figure out how to read in selection 
+	#	numscene = 6
 	
-	choose.clicked.connect(lambda: chooseActivities(numscene))
+	choose.clicked.connect(chooseActivities)
 	choose.move(375,550)
-	
+
+	global numscenes	
+	print(numscenes.currentText())
+	global numscene
+	numscene = int(str(numscenes.currentText()))
+
 	chooseLocScreen.show()
 
 def chooseSceneSettings():
@@ -103,6 +125,7 @@ def chooseSceneSettings():
         #choose num scenes
 	numSceneLabel  = QLabel("Number of scenes: ",sceneSettingsScreen)
 	numSceneLabel.move(290, 150)
+	global numscenes
 	numscenes = QComboBox(sceneSettingsScreen)
 	numscenes.addItem("1",sceneSettingsScreen)
 	numscenes.addItem("2",sceneSettingsScreen)
@@ -112,7 +135,13 @@ def chooseSceneSettings():
         numscenes.move(410, 145)
 	#later add: select specfic players
 	button = QPushButton("Done", sceneSettingsScreen)
-	button.clicked.connect(chooseLocation)
+	global numscene
+	print(numscenes.currentText())
+#	numscene = int(str(numscenes.currentText()))
+	print("Numscene within choose scene setting"+`numscene`)
+	button.clicked.connect(chooseLocation)	
+#button.clicked.connect(chooseLocation(numscenes.itemData(numscene.currentIndex())))
+#	print(chooseLocation(numscenes.currentText()))
 	button.move(350, 400)
 	
 	#declaration of map object for this instance
@@ -120,16 +149,28 @@ def chooseSceneSettings():
 
 	sceneSettingsScreen.show()
 	#app.exec_()
-def chooseActivities(numscene):
+
+
+def chooseActivities():
 	chooseLocScreen.hide()
+
+	'''	
+	if(numscene < 1):
+		activityScreen.hide()
+		mainMenu()	
+	'''
 	title = QLabel('Scene Activity Selection', activityScreen)
         title.setStyleSheet("font: bold 15pt")
         title.move(320,30)
 	actLabel = QLabel('Choose an activity for Scene ', activityScreen)
+	actLabel.update()
+	global sceneNum
 	sceneNum = QLabel('', activityScreen)
 	sceneNum.setNum(numscene)
 	actLabel.move(300, 100)
 	sceneNum.move(500, 100)
+	sceneNum.update()
+	global activitySelect
 	activitySelect = QComboBox(activityScreen)
 	activitySelect.addItem("Treasure Hunting", activityScreen)
 	activitySelect.addItem("Hiking", activityScreen)
@@ -139,20 +180,49 @@ def chooseActivities(numscene):
 		#numscene = numscene-1
 		
 	print(numscene)
-		#button.clicked.connect(lambda: chooseActivities(numscene))
-		#button.move(350, 400)
-		#activityScreen.show()
-	#else:
+	button.clicked.connect(chooseActivitiesHelper)
+	#button.move(350, 400)
+	#activityScreen.show()
+		#else:
 		#button.clicked.connect(exit)
-        button.clicked.connect(lambda: chooseActivitiesHelper(numscene)) 
-       	button.move(350, 400)
+	        #button.clicked.connect()
+#lambda: chooseActivitiesHelper(numscene)) 
+       	button.move(350, 400)	
+	#window.show()
+#	activityScreen.show()
+	'''
+	if(numscene == 6):
+		activityScreen.show()
+	else:
+		activityScreen.update()
+	'''
 	activityScreen.show()
-def chooseActivitiesHelper(numscene):
+	
+def chooseActivitiesHelper():
+	global numscene
+	numscene -= 1
+	if(numscene < 1):
+		activityScreen.hide()
+		mainMenu()
+	else:
+		print(numscene)
+		print(activitySelect.currentText())
+		#Saving the choices for scenes
+		global sceneNum
+		sceneNum.setNum(numscene)
+	#	sceneNum.update()
+	#	chooseActivities()
+	'''
 	numscene = numscene-1
 	if(numscene>0):
+		print("numscene is"+`numscene`)
 		chooseActivities(numscene)
-	
+	#else:
+		#done picking scenes
+	'''
+
 def mainMenu():
+#	window.hide()
 	title = QLabel('Main Menu', startScreen)
         title.setStyleSheet("font: bold 15pt")
         title.move(320,30)
@@ -172,7 +242,7 @@ def mainMenu():
 	app.exec_()
 #chooseLocation()
 #chooseSceneSettings()
-mainMenu()
+main()
 
 
 #if _name_ == '_main_':
