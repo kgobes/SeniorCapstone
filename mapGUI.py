@@ -23,9 +23,14 @@ sceneSettingsScreen.resize(900, 600)
 #activity specifics screen- choose activity and randomness level
 activityScreen = QWidget() #screen repeated for each scene
 activityScreen.resize(900, 600)
-#global numscene
-numscene = 8
 
+numscene = 8
+#location chosen on chooose Loc screen
+locationChosen = None
+#used to turn button off during location selection
+lastButtonClicked = None
+#number of players chosen
+numberOfPlayers = 0
 '''
 window = QWidget()
 window.show()
@@ -48,57 +53,64 @@ def chooseLocation():
 	title = QLabel('Select a Location for Scene 1', chooseLocScreen)
 	title.setStyleSheet("font: bold 15pt")
 	title.move(320,30)
+
+	choose = QPushButton("Choose this location", chooseLocScreen)
+	choose.setEnabled(False)
+#       QCoreApplication::processEvents()                                                                                          
+        choose.clicked.connect(chooseActivities)
+        choose.move(375,550)
+	global lastButtonClicked
+	lastButtonClicked = choose
 	
 	loc1 = QLabel(chooseLocScreen)
 	loc1.setGeometry(100,100,200,150)
 	loc1.setPixmap(QPixmap('locimages/city.jpg'))
-	loc1Text = QLabel("City",chooseLocScreen)
-	loc1Text.setGeometry(180,235,100,100)
-
+	loc1Text = QPushButton("City", chooseLocScreen)
+	loc1Text.setGeometry(160,260,100,25)
+	loc1Text.setStyleSheet("background-color: white")
+	loc1Text.clicked.connect(lambda: locationSelect(loc1Text, "city", choose))
 
 	loc2 = QLabel(chooseLocScreen)
 	loc2.setGeometry(350,100,200,150)
 	loc2.setPixmap(QPixmap('locimages/mountains.jpg'))
-	loc2Text = QLabel("Mountains",chooseLocScreen)
-	loc2Text.setGeometry(420,235,100,100)
-
+	loc2Text = QPushButton("Mountains", chooseLocScreen)
+        loc2Text.setStyleSheet("background-color: white")
+        loc2Text.clicked.connect(lambda: locationSelect(loc2Text, "mountain", choose))
+	loc2Text.setGeometry(400,260,100,25)
 
 	loc3 = QLabel(chooseLocScreen)
 	loc3.setGeometry(600,100,200,150)
 	loc3.setPixmap(QPixmap('locimages/forest.jpg'))
-	loc3Text = QLabel("Forest",chooseLocScreen)
-	loc3Text.setGeometry(670,235,100,100)
+	loc3Text = QPushButton("Forest", chooseLocScreen)
+	loc3Text.setStyleSheet("background-color: white")
+        loc3Text.clicked.connect(lambda: locationSelect(loc3Text, "forest", choose))
+       	loc3Text.setGeometry(650,260,100,25)
 
 
 	loc4 = QLabel(chooseLocScreen)
 	loc4.setGeometry(100,320,200,150)
 	loc4.setPixmap(QPixmap('locimages/ocean.jpg'))
-	loc4Text = QLabel("Ocean",chooseLocScreen)
-	loc4Text.setGeometry(170,455,100,100)
+	loc4Text = QPushButton("Ocean", chooseLocScreen)
+	loc4Text.setStyleSheet("background-color: white")
+        loc4Text.clicked.connect(lambda: locationSelect(loc4Text, "ocean", choose))
+       	loc4Text.setGeometry(150,480,100,25)
 
 
 	loc5 = QLabel(chooseLocScreen)
 	loc5.setGeometry(350,320,200,150)
 	loc5.setPixmap(QPixmap('locimages/farm.jpg'))
-	loc5Text = QLabel("Farm",chooseLocScreen)
-	loc5Text.setGeometry(430,455,100,100)
+	loc5Text = QPushButton("Farm", chooseLocScreen)
+	loc5Text.setStyleSheet("background-color: white")
+        loc5Text.clicked.connect(lambda: locationSelect(loc5Text, "farm", choose))
+       	loc5Text.setGeometry(410,480,100,25)
 
 	loc6 = QLabel(chooseLocScreen)
 	loc6.setGeometry(600,320,200,150)
 	loc6.setPixmap(QPixmap('locimages/desert.jpg'))
-	loc6Text = QLabel("Desert",chooseLocScreen)
-	loc6Text.setGeometry(670,455,100,100)
-
-	#loc6.connect(SIGNAL('clicked()'), on_loc_click)
-	#loc6.mousePressEvent = on_loc_click
-	#loc6.setSyleSheet("border: 1px solid black")
-
-	choose = QPushButton("Choose this location", chooseLocScreen)
-	#figure out how to read in selection 
-	#	numscene = 6
-	
-	choose.clicked.connect(chooseActivities)
-	choose.move(375,550)
+	loc6Text = QPushButton("Desert", chooseLocScreen)
+	loc6Text.setStyleSheet("background-color: white")
+        loc6Text.clicked.connect(lambda: locationSelect(loc6Text, "desert", choose))
+       	loc6Text.setGeometry(650,480,100,25)
 
 	global numscenes	
 	print(numscenes.currentText())
@@ -106,7 +118,31 @@ def chooseLocation():
 	numscene = int(str(numscenes.currentText()))
 
 	chooseLocScreen.show()
+#method to read user input for choosing location 
+def locationSelect(clickedButton, buttonName, choose):
+	#if the button hasn't been selected yet; it is white now
+	if(clickedButton.palette().button().color().name() == "#ffffff"): #color white
+		#change color of button
+		clickedButton.setStyleSheet("background-color: skyblue")
+		global locationChosen
+		#set new location
+		locationChosen = buttonName
+		print("my location is: ", locationChosen)
+		#allow user to move on from this screen
+		choose.setEnabled(True)
+		#change the color of last button clicked
+		global lastButtonClicked	
+		lastButtonClicked.setStyleSheet("background-color: white");
+		lastButtonClicked = clickedButton
+	else:
+		#if the color is not white and it is clicked, make it white
+		clickedButton.setStyleSheet("background-color: white")
+		locationChosen = None
+		print("my location is: ", locationChosen)
+		#user can't change screens until they choose another location
+		choose.setEnabled(False)
 
+		
 def chooseSceneSettings():
 	startScreen.hide()
 	title = QLabel('Choose Scene Settings', sceneSettingsScreen)
@@ -140,15 +176,12 @@ def chooseSceneSettings():
 #	numscene = int(str(numscenes.currentText()))
 	print("Numscene within choose scene setting"+`numscene`)
 	button.clicked.connect(chooseLocation)	
-#button.clicked.connect(chooseLocation(numscenes.itemData(numscene.currentIndex())))
-#	print(chooseLocation(numscenes.currentText()))
 	button.move(350, 400)
 	
 	#declaration of map object for this instance
 	#myMap = 
 
 	sceneSettingsScreen.show()
-	#app.exec_()
 
 
 def chooseActivities():
