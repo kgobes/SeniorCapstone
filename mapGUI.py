@@ -1,5 +1,5 @@
 import sys
-import map
+from story_map import StoryMap
 #import ExtendedQLabel
 from PyQt4 import *
 from PyQt4.QtCore import *
@@ -35,6 +35,8 @@ lastButtonClicked = None
 #number of players chosen
 numberOfPlayers = 0
 activitySelect = QComboBox(activityScreen)
+
+
 '''
 window = QWidget()
 window.show()
@@ -190,11 +192,12 @@ def getSceneNumChosen():
 	numplayers = int(str(numplayersBox.currentText()))
         print("Numscene within new helper method "+`numscene`)
 	#create map object
-	myMap = map.Map("Kira's Sweet Story Map", numscene, numplayers, locationChosen)
-	myMap.printStoryInfo #this doesn't work yet
+	myMap = StoryMap("Kira's Sweet Story Map", numscene, numplayers, locationChosen)
+	myMap.printStoryInfo() #this doesn't work yet
 	print("printing after that story shit printed")
 	#need to format this correctly
-	print(myMap.getName)
+	#print myMap.getName
+	print(myMap.getName())
 	#myMap = map.Map()
 	
 #go to choose activities for scenes method
@@ -229,7 +232,7 @@ def chooseActivities():
 	#if(numscene>0):
 		#numscene = numscene-1
 		
-	print(numscene)
+	#print(numscene)
 	button.clicked.connect(chooseActivitiesHelper)
 	#button.move(350, 400)
 	#activityScreen.show()
@@ -251,7 +254,12 @@ def chooseActivities():
 def chooseActivitiesHelper():
 	global numscene
 	numscene -= 1
-	if(numscene < 1):
+	if(numscene < 0):
+		activityScreen.hide()
+		mainMenu()
+	elif(numscene == 0): #Last scene
+		print(numscene)
+		print(activitySelect.currentText())
 		activityScreen.hide()
 		mainMenu()
 	else:
@@ -279,6 +287,9 @@ def createActivityOptions():
 	else:
 		activitySelect.addItem("Treasure Hunting", activityScreen)
 		activitySelect.addItem("Hiking", activityScreen)
+
+		
+
 def mainMenu():
 #	window.hide()
 	title = QLabel('Main Menu', startScreen)
