@@ -24,13 +24,17 @@ sceneSettingsScreen.resize(900, 600)
 activityScreen = QWidget() #screen repeated for each scene
 activityScreen.resize(900, 600)
 
+#how many scenes there are; counts down; arbitrary number initially to test changing it
 numscene = 8
+numscenesBox = None
+numplayersBox = None
 #location chosen on chooose Loc screen
 locationChosen = None
 #used to turn button off during location selection
 lastButtonClicked = None
 #number of players chosen
 numberOfPlayers = 0
+activitySelect = QComboBox(activityScreen)
 '''
 window = QWidget()
 window.show()
@@ -46,8 +50,7 @@ def main():
 	#preload the scenes from function of another class
 #	window.resize(900, 600)
 	mainMenu()
-	print('hey')
-#	chooseLocation()
+
 
 def chooseLocation():	
 	title = QLabel('Select a Location for Scene 1', chooseLocScreen)
@@ -57,7 +60,7 @@ def chooseLocation():
 	choose = QPushButton("Choose this location", chooseLocScreen)
 	choose.setEnabled(False)
 #       QCoreApplication::processEvents()                                                                                          
-        choose.clicked.connect(chooseActivities)
+        choose.clicked.connect(chooseSceneSettings)
         choose.move(375,550)
 	global lastButtonClicked
 	lastButtonClicked = choose
@@ -112,12 +115,14 @@ def chooseLocation():
         loc6Text.clicked.connect(lambda: locationSelect(loc6Text, "desert", choose))
        	loc6Text.setGeometry(650,480,100,25)
 
-	global numscenes	
-	print(numscenes.currentText())
-	global numscene
-	numscene = int(str(numscenes.currentText()))
+#	global numscenesBox	
+#	print(numscenesBox.currentText())
+#	global numscene
+#	numscene = int(str(numscenesBox.currentText()))
 
 	chooseLocScreen.show()
+
+
 #method to read user input for choosing location 
 def locationSelect(clickedButton, buttonName, choose):
 	#if the button hasn't been selected yet; it is white now
@@ -151,38 +156,49 @@ def chooseSceneSettings():
 	#choose num players
 	numPlayerLabel  = QLabel("Number of players: ",sceneSettingsScreen)
         numPlayerLabel.move(290, 100)
-	numplayers = QComboBox(sceneSettingsScreen)
-	numplayers.addItem("1", sceneSettingsScreen)
-	numplayers.addItem("2", sceneSettingsScreen)
-	numplayers.addItem("3",sceneSettingsScreen)
-	numplayers.addItem("4",sceneSettingsScreen)
-	numplayers.addItem("5",sceneSettingsScreen)
-	numplayers.move(410, 95)
+	global numplayersBox
+	numplayersBox = QComboBox(sceneSettingsScreen)
+	numplayersBox.addItem("1", sceneSettingsScreen)
+	numplayersBox.addItem("2", sceneSettingsScreen)
+	numplayersBox.addItem("3",sceneSettingsScreen)
+	numplayersBox.addItem("4",sceneSettingsScreen)
+	numplayersBox.addItem("5",sceneSettingsScreen)
+	numplayersBox.move(410, 95)
         #choose num scenes
 	numSceneLabel  = QLabel("Number of scenes: ",sceneSettingsScreen)
 	numSceneLabel.move(290, 150)
-	global numscenes
-	numscenes = QComboBox(sceneSettingsScreen)
-	numscenes.addItem("1",sceneSettingsScreen)
-	numscenes.addItem("2",sceneSettingsScreen)
-	numscenes.addItem("3",sceneSettingsScreen)
-	numscenes.addItem("4",sceneSettingsScreen)
-	numscenes.addItem("5",sceneSettingsScreen)
-        numscenes.move(410, 145)
+	global numscenesBox
+	numscenesBox = QComboBox(sceneSettingsScreen)
+	numscenesBox.addItem("1",sceneSettingsScreen)
+	numscenesBox.addItem("2",sceneSettingsScreen)
+	numscenesBox.addItem("3",sceneSettingsScreen)
+	numscenesBox.addItem("4",sceneSettingsScreen)
+	numscenesBox.addItem("5",sceneSettingsScreen)
+        numscenesBox.move(410, 145)
 	#later add: select specfic players
 	button = QPushButton("Done", sceneSettingsScreen)
-	global numscene
-	print(numscenes.currentText())
-#	numscene = int(str(numscenes.currentText()))
-	print("Numscene within choose scene setting"+`numscene`)
-	button.clicked.connect(chooseLocation)	
+	button.clicked.connect(getSceneNumChosen)	
 	button.move(350, 400)
 	
-	#declaration of map object for this instance
-	#myMap = 
-
 	sceneSettingsScreen.show()
-
+#helper method for getting the number of scenes selected once button is pressed
+def getSceneNumChosen():
+	global numscene
+        print(numscenesBox.currentText())
+        numscene = int(str(numscenesBox.currentText()))
+	#global numplayers
+	numplayers = int(str(numplayersBox.currentText()))
+        print("Numscene within new helper method "+`numscene`)
+	#create map object
+	myMap = map.Map("Kira's Sweet Story Map", numscene, numplayers, locationChosen)
+	myMap.printStoryInfo #this doesn't work yet
+	print("printing after that story shit printed")
+	#need to format this correctly
+	print(myMap.getName)
+	#myMap = map.Map()
+	
+#go to choose activities for scenes method
+	chooseActivities()
 
 def chooseActivities():
 	chooseLocScreen.hide()
@@ -203,10 +219,11 @@ def chooseActivities():
 	actLabel.move(300, 100)
 	sceneNum.move(500, 100)
 	sceneNum.update()
+	createActivityOptions()
+	#activitySelect = QComboBox(activityScreen)
+	#activitySelect.addItem("Treasure Hunting", activityScreen)
+	#activitySelect.addItem("Hiking", activityScreen)
 	global activitySelect
-	activitySelect = QComboBox(activityScreen)
-	activitySelect.addItem("Treasure Hunting", activityScreen)
-	activitySelect.addItem("Hiking", activityScreen)
 	activitySelect.move(420, 200)
 	button = QPushButton("Done", activityScreen)
 	#if(numscene>0):
@@ -253,7 +270,15 @@ def chooseActivitiesHelper():
 	#else:
 		#done picking scenes
 	'''
-
+#method to add specific scene activity choices for each location
+def createActivityOptions():
+	global activitySelect
+	if(locationChosen == "city"):
+		activitySelect.addItem("Movies", activityScreen)
+		activitySelect.addItem("Museum", activityScreen)
+	else:
+		activitySelect.addItem("Treasure Hunting", activityScreen)
+		activitySelect.addItem("Hiking", activityScreen)
 def mainMenu():
 #	window.hide()
 	title = QLabel('Main Menu', startScreen)
@@ -261,7 +286,7 @@ def mainMenu():
         title.move(320,30)
 	#button for creating new story or editing old
 	createEdit = QPushButton("Create or Edit Story", startScreen)
-	createEdit.clicked.connect(chooseSceneSettings)
+	createEdit.clicked.connect(chooseLocation)
 	createEdit.move(375, 150)
 	#button for playing existing
 	playExisting = QPushButton("Play Existing Story", startScreen)

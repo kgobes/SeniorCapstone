@@ -3,7 +3,7 @@ from location import Location
 class Map(object):
 	'''
 	This class represents the map for the story.
-
+	It contains an array of locations that each have their own scenes to play within them. When the user create a story, they start with the map.
 	'''
 
 	def __init__(self, name, numscenes, numplayers, location):
@@ -19,10 +19,8 @@ class Map(object):
        		numscenes = numscenesX
 	def setNumPlayers(numplayersX):
 		numplayers = numplayersX
-	#for testing, doesn't work yet
 	def printStoryInfo():
-		print("name: "+ `name`
-	#for testing, doesn't return desired data type yet
+		print("name: "+ `name`)
 	def getName():
 		return name
 '''
