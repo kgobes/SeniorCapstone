@@ -1,4 +1,6 @@
 from location import Location
+import utility_funcs
+#from _collections_abc import Sequence
 
 class StoryMap:
 	'''
@@ -6,23 +8,43 @@ class StoryMap:
 
 	'''
 
-	def __init__(self, name, numscenes, numplayers, location):
+	def __init__(self, name, numscenes, numplayers, locations=None):
 		self.name = name
 		self.numscenes = numscenes
 		self.numplayers = numplayers
-		self.location = location
+		self.locations = {} #locations # location
+#		super().__init__()
+
+		if locations != None:	
+			for key,val in locations.items():
+				if isinstance(val, Location):
+					self.locations[key]=val
+					#self.locations.append(loc)
+				else:
+					utility_funcs.eprint(
+						"Invalid Location passed to StoryMap initializer!")
+
+#	def __getitem__(self,i):
+#		return self.locations[i]
+#	def __len__(self):
+#		return len(self.locations)
 #def __init__(self):
 	#print("story created")
+	
+	#def addLocation(self, loc):
+	#	(self.locations).append(loc)
+
 	def setLocation(locationX):
-       		location = locationX
-       	def setNumScenes(numscenesX):
+		location = locationX
+       	
+	def setNumScenes(numscenesX):
        		numscenes = numscenesX
 	def setNumPlayers(numplayersX):
 		numplayers = numplayersX
-	#for testing, doesn't work yet
-	def printStoryInfo(self):
+	#for testing, take in location in hashmap
+	def printStoryInfo(self, loc):
 		print("name: "+ `self.name`+"\n number of scenes:"+`self.numscenes`
-			+" number of players:"+`self.numplayers`+" location:"+`self.location`)
+			+" number of players:"+`self.numplayers`+" location:"+`self.locations[loc].name`)
 	#for testing, doesn't return desired data type yet
 	def getName(self):
 		return self.name

@@ -1,6 +1,6 @@
 from location import Location
 
-class Map(object):
+class Map:
 	'''
 	This class represents the map for the story.
 
@@ -21,7 +21,7 @@ class Map(object):
 		numplayers = numplayersX
 	#for testing, doesn't work yet
 	def printStoryInfo():
-		print("name: "+ `name`
+		print("name: "+ `self.name`+"\n number of scenes:"+`numscenes`)
 	#for testing, doesn't return desired data type yet
 	def getName():
 		return name

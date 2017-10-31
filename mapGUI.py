@@ -4,6 +4,9 @@ from story_map import StoryMap
 from PyQt4 import *
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
+#file with the test() that runs the whole Lili
+#from story_telling import test
+from dict_map import dictMap
 import os
 
 #app is main application- our platform for interaction with the user
@@ -51,8 +54,10 @@ def main():
 	#Start the app
 	#preload the scenes from function of another class
 #	window.resize(900, 600)
+	#dict_map.createMap()
 	mainMenu()
-
+	#dict_map.createMap()
+	
 
 def chooseLocation():	
 	title = QLabel('Select a Location for Scene 1', chooseLocScreen)
@@ -66,21 +71,21 @@ def chooseLocation():
         choose.move(375,550)
 	global lastButtonClicked
 	lastButtonClicked = choose
-	
+
 	loc1 = QLabel(chooseLocScreen)
 	loc1.setGeometry(100,100,200,150)
 	loc1.setPixmap(QPixmap('locimages/city.jpg'))
 	loc1Text = QPushButton("City", chooseLocScreen)
 	loc1Text.setGeometry(160,260,100,25)
 	loc1Text.setStyleSheet("background-color: white")
-	loc1Text.clicked.connect(lambda: locationSelect(loc1Text, "city", choose))
+	loc1Text.clicked.connect(lambda: locationSelect(loc1Text, "City", choose))
 
 	loc2 = QLabel(chooseLocScreen)
 	loc2.setGeometry(350,100,200,150)
 	loc2.setPixmap(QPixmap('locimages/mountains.jpg'))
 	loc2Text = QPushButton("Mountains", chooseLocScreen)
         loc2Text.setStyleSheet("background-color: white")
-        loc2Text.clicked.connect(lambda: locationSelect(loc2Text, "mountain", choose))
+        loc2Text.clicked.connect(lambda: locationSelect(loc2Text, "Mountain", choose))
 	loc2Text.setGeometry(400,260,100,25)
 
 	loc3 = QLabel(chooseLocScreen)
@@ -88,7 +93,7 @@ def chooseLocation():
 	loc3.setPixmap(QPixmap('locimages/forest.jpg'))
 	loc3Text = QPushButton("Forest", chooseLocScreen)
 	loc3Text.setStyleSheet("background-color: white")
-        loc3Text.clicked.connect(lambda: locationSelect(loc3Text, "forest", choose))
+        loc3Text.clicked.connect(lambda: locationSelect(loc3Text, "Forest", choose))
        	loc3Text.setGeometry(650,260,100,25)
 
 
@@ -97,7 +102,7 @@ def chooseLocation():
 	loc4.setPixmap(QPixmap('locimages/ocean.jpg'))
 	loc4Text = QPushButton("Ocean", chooseLocScreen)
 	loc4Text.setStyleSheet("background-color: white")
-        loc4Text.clicked.connect(lambda: locationSelect(loc4Text, "ocean", choose))
+        loc4Text.clicked.connect(lambda: locationSelect(loc4Text, "Ocean", choose))
        	loc4Text.setGeometry(150,480,100,25)
 
 
@@ -106,7 +111,7 @@ def chooseLocation():
 	loc5.setPixmap(QPixmap('locimages/farm.jpg'))
 	loc5Text = QPushButton("Farm", chooseLocScreen)
 	loc5Text.setStyleSheet("background-color: white")
-        loc5Text.clicked.connect(lambda: locationSelect(loc5Text, "farm", choose))
+        loc5Text.clicked.connect(lambda: locationSelect(loc5Text, "Farm", choose))
        	loc5Text.setGeometry(410,480,100,25)
 
 	loc6 = QLabel(chooseLocScreen)
@@ -114,7 +119,7 @@ def chooseLocation():
 	loc6.setPixmap(QPixmap('locimages/desert.jpg'))
 	loc6Text = QPushButton("Desert", chooseLocScreen)
 	loc6Text.setStyleSheet("background-color: white")
-        loc6Text.clicked.connect(lambda: locationSelect(loc6Text, "desert", choose))
+        loc6Text.clicked.connect(lambda: locationSelect(loc6Text, "Desert", choose))
        	loc6Text.setGeometry(650,480,100,25)
 
 #	global numscenesBox	
@@ -171,11 +176,19 @@ def chooseSceneSettings():
 	numSceneLabel.move(290, 150)
 	global numscenesBox
 	numscenesBox = QComboBox(sceneSettingsScreen)
-	numscenesBox.addItem("1",sceneSettingsScreen)
-	numscenesBox.addItem("2",sceneSettingsScreen)
-	numscenesBox.addItem("3",sceneSettingsScreen)
-	numscenesBox.addItem("4",sceneSettingsScreen)
-	numscenesBox.addItem("5",sceneSettingsScreen)
+
+	#Ensure allowing number of scenes available
+	loc = dictMap.locations[locationChosen]
+	index = 1
+	for sc in loc.list_of_scenes:
+		numscenesBox.addItem(str(index),sceneSettingsScreen)
+		index = index+1
+
+#	numscenesBox.addItem("1",sceneSettingsScreen)
+#	numscenesBox.addItem("2",sceneSettingsScreen)
+#	numscenesBox.addItem("3",sceneSettingsScreen)
+#	numscenesBox.addItem("4",sceneSettingsScreen)
+#	numscenesBox.addItem("5",sceneSettingsScreen)
         numscenesBox.move(410, 145)
 	#later add: select specfic players
 	button = QPushButton("Done", sceneSettingsScreen)
@@ -192,8 +205,8 @@ def getSceneNumChosen():
 	numplayers = int(str(numplayersBox.currentText()))
         print("Numscene within new helper method "+`numscene`)
 	#create map object
-	myMap = StoryMap("Kira's Sweet Story Map", numscene, numplayers, locationChosen)
-	myMap.printStoryInfo() #this doesn't work yet
+	myMap = StoryMap("Kira's Sweet Story Map", numscene, numplayers, {locationChosen:dictMap.locations[locationChosen]})
+	myMap.printStoryInfo(locationChosen) #this doesn't work yet
 	print("printing after that story shit printed")
 	#need to format this correctly
 	#print myMap.getName
@@ -205,7 +218,13 @@ def getSceneNumChosen():
 
 def chooseActivities():
 	chooseLocScreen.hide()
-
+	
+	#NEW
+	#Create map to add to created maps
+	global mymap
+	#Create new location
+	
+	#mymap = StoryMap("My Map", numscenes, 1, {locationChosen:dictMap.locations[locationChosen]})
 	'''	
 	if(numscene < 1):
 		activityScreen.hide()
@@ -266,6 +285,9 @@ def chooseActivitiesHelper():
 		print(numscene)
 		print(activitySelect.currentText())
 		#Saving the choices for scenes
+		#TODO - add the scene from the dictMap scene -may need to implement a hasmap for scene
+		mymap.locations[locationChosen].list_of_scenes.append()
+
 		global sceneNum
 		sceneNum.setNum(numscene)
 	#	sceneNum.update()
@@ -281,12 +303,16 @@ def chooseActivitiesHelper():
 #method to add specific scene activity choices for each location
 def createActivityOptions():
 	global activitySelect
-	if(locationChosen == "city"):
-		activitySelect.addItem("Movies", activityScreen)
-		activitySelect.addItem("Museum", activityScreen)
-	else:
-		activitySelect.addItem("Treasure Hunting", activityScreen)
-		activitySelect.addItem("Hiking", activityScreen)
+	for key in (dictMap.locations[locationChosen]).list_of_scenes.keys():
+		activitySelect.addItem(key,activityScreen)
+		#activitySelect.addItem(sce.name, activityScreen)
+
+#	if(locationChosen == "city"):
+#		activitySelect.addItem("Movies", activityScreen)
+#		activitySelect.addItem("Museum", activityScreen)
+#	else:
+#		activitySelect.addItem("Treasure Hunting", activityScreen)
+#		activitySelect.addItem("Hiking", activityScreen)
 
 		
 
@@ -301,7 +327,10 @@ def mainMenu():
 	createEdit.move(375, 150)
 	#button for playing existing
 	playExisting = QPushButton("Play Existing Story", startScreen)
-	playExisting.clicked.connect(exit) #eventually will have list of stories and then play them
+#	playExisting.clicked.connect(exit) #eventually will have list of stories and then play them
+
+	#UNCOMMENT WHEN USING STORY_TELLING.PY AGAIN
+#	playExisting.clicked.connect(test) #eventually will have list of stories and then play them
 	playExisting.move(375, 250)
 	#button for speech recognition 
 	addPlayers = QPushButton("Add Players", startScreen)
@@ -311,8 +340,8 @@ def mainMenu():
 	app.exec_()
 #chooseLocation()
 #chooseSceneSettings()
+#main()
+
+
+#if __name__ == '__main__':
 main()
-
-
-#if _name_ == '_main_':
-#	main()
