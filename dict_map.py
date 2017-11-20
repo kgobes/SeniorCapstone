@@ -3,8 +3,9 @@ from story_node import StoryNode
 from scene import Scene
 from location import Location
 from story_map import StoryMap
+import test_story
 import cinema_story
-
+import park_story
 
 '''
 	This file creates the map that holds the values the GUI 
@@ -15,12 +16,14 @@ import cinema_story
 
 #def createMap():
 	#Scene 1 - Movie scene - story nodes within "cinema_story.py"
-scene1 = Scene("Movies", cinema_story.entrance)
-scene2 = Scene("Park", 0)
+movies = Scene('Movies', cinema_story.entrance,cinema_story.entrance_edge, cinema_story.exit_node, cinema_story.cinema_nodes)
+#scene2 = Scene('Park', 0, 0, [])
+zoo = Scene('Zoo',test_story.entrance,test_story.entrance_edge,test_story.exit_node, test_story.zoo_nodes)
+park = Scene('Park', park_story.entrance, park_story.entrance_edge, park_story.exit_node, park_story.park_nodes)
 
 	#Location 1 - City - only has one scene right now
-scenes_list = {scene1.name:scene1,scene2.name:scene2}
-location1 = Location("City",scenes_list)
+movie_scenes_list = {movies.name:movies,zoo.name:zoo, park.name:park}
+location1 = Location("City",movie_scenes_list)
 
 
 	#Map that holds all the possible data to play

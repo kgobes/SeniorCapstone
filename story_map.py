@@ -14,7 +14,7 @@ class StoryMap:
 		self.numplayers = numplayers
 		self.locations = {} #locations # location
 #		super().__init__()
-
+		startNode = None
 		if locations != None:	
 			for key,val in locations.items():
 				if isinstance(val, Location):

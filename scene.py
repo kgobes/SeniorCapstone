@@ -8,10 +8,13 @@ class Scene:
 	Ex: Scene: Movies Story_node: Buying a ticket
 	'''
 
-	def __init__(self, name, root):
+	def __init__(self, name, root, start_edge, end, story_nodes):
 		#: Name of the scene
 		self.name = name	
 		#: Story nodes that are within the scene, start with the root or starting node
-		self.story_nodes = root 
-
+		self.start = root
+		self.start_edge = start_edge
+		self.story_nodes = story_nodes
+		#self.story_nodes = root 
+		self.end = end
 	#add story_nodes by adding children to scenes starting from the root
