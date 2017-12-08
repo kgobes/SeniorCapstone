@@ -1,0 +1,2 @@
+lili_audio:lili_bringup:lili_description:lili_graphics:lili_navigation:lili_storytelling
+-DCATKIN_DEVEL_PREFIX=/home/xin/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/xin/catkin_ws/install -G Unix Makefiles

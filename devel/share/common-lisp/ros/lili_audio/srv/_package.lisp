@@ -1,0 +1,10 @@
+(cl:defpackage lili_audio-srv
+  (:use )
+  (:export
+   "RECOGNIZESPEECH"
+   "<RECOGNIZESPEECH-REQUEST>"
+   "RECOGNIZESPEECH-REQUEST"
+   "<RECOGNIZESPEECH-RESPONSE>"
+   "RECOGNIZESPEECH-RESPONSE"
+  ))
+

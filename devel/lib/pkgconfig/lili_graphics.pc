@@ -1,0 +1,8 @@
+prefix=/home/xin/catkin_ws/devel
+
+Name: lili_graphics
+Description: Description of lili_graphics
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/xin/catkin_ws/devel/lib 
+Requires: 

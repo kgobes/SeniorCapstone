@@ -1,0 +1,8 @@
+prefix=/home/xin/catkin_ws/install
+
+Name: lili_audio
+Description: Description of lili_audio
+Version: 0.0.0
+Cflags: -I/home/xin/catkin_ws/install/include
+Libs: -L/home/xin/catkin_ws/install/lib 
+Requires: message_runtime actionlib_msgs

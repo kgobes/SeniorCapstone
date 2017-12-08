@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package>
+  <name>lili_navigation</name>
+  <version>0.0.0</version>
+  <description>The lili_navigation package</description>
+
+  <maintainer email="adennis96@users.noreply.github.com">adennis96</maintainer>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>lili_bringup</run_depend>
+  <run_depend>gmapping</run_depend>
+  <run_depend>amcl</run_depend>
+  <run_depend>move_base</run_depend>
+  <run_depend>dwa_local_planner</run_depend>
+  <run_depend>navfn</run_depend>
+
+</package>
